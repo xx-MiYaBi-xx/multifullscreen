@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20aria-hidden%3D%22true%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22mfI%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2364c8ff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231e6edc%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%2230%22%20height%3D%2220%22%20fill%3D%22%23263246%22%2F%3E%3Crect%20x%3D%223.5%22%20y%3D%225.5%22%20width%3D%2225%22%20height%3D%2215%22%20fill%3D%22url%28%23mfI%29%22%2F%3E%3Cg%20stroke%3D%22%23ebffff%22%20stroke-opacity%3D%22.92%22%20stroke-width%3D%221.6%22%3E%3Cpath%20d%3D%22M16%205.5V20.5%22%2F%3E%3Cpath%20d%3D%22M3.5%2013H28.5%22%2F%3E%3C%2Fg%3E%3Crect%20x%3D%2213.5%22%20y%3D%2223%22%20width%3D%225%22%20height%3D%224%22%20fill%3D%22%23465264%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%2227%22%20width%3D%2216%22%20height%3D%223%22%20fill%3D%22%23465264%22%2F%3E%3C%2Fsvg%3E">
+<title>MultiFullscreen 使い方ガイド</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Yu Gothic UI","Hiragino Sans","Meiryo",system-ui,sans-serif;color:#1f2733;background:#f4f7fb;line-height:1.85;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header.hero{background:linear-gradient(135deg,#0f2a52,#1e6fdc 60%,#46b4ff);color:#fff;padding:56px 0 48px;text-align:center}
+.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,44px);letter-spacing:.02em}
+.hero p{margin:6px auto;max-width:640px;opacity:.95}
+.badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:2px 14px;font-size:13px;margin-top:10px}
+nav.toc{background:#fff;border-bottom:1px solid #dde4ee;padding:12px 0;text-align:center;font-size:14px}
+nav.toc a{color:#1e6fdc;text-decoration:none;margin:0 10px;display:inline-block}
+section{padding:44px 0 8px}
+h2{font-size:26px;margin:0 0 6px;padding-left:14px;border-left:6px solid #1e6fdc}
+h2 .no{color:#1e6fdc;margin-right:6px}
+h3{font-size:18px;margin:26px 0 6px}
+.lead{color:#52606f;margin:4px 0 18px}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(20,50,100,.08);padding:22px;margin:16px 0}
+.row{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.row>.txt{flex:1 1 300px}
+.row>.fig{flex:1 1 360px;text-align:center}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:4px 0 10px 44px}
+.steps li:before{content:counter(s);position:absolute;left:0;top:4px;width:30px;height:30px;border-radius:50%;background:#1e6fdc;color:#fff;font-weight:700;text-align:center;line-height:30px}
+kbd{background:#eef2f8;border:1px solid #c5d0df;border-bottom-width:2px;border-radius:5px;padding:1px 7px;font-size:.9em;font-family:Consolas,monospace}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border-bottom:1px solid #e3e9f1;padding:9px 10px;text-align:left}
+th{background:#eef3fa}
+.note{background:#fff8e1;border-left:5px solid #f5b400;padding:10px 14px;border-radius:8px;font-size:14.5px;margin:14px 0}
+.tip{background:#e9f6ee;border-left:5px solid #2e9e5b;padding:10px 14px;border-radius:8px;font-size:14.5px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.feat{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(20,50,100,.07)}
+.feat b{display:block;color:#1e6fdc;margin-bottom:4px}
+.cap{font-size:12.5px;color:#7a8696;margin-top:6px}
+/* mock windows */
+.win{background:#f0f0f0;border:1px solid #8a94a3;border-radius:6px;box-shadow:0 8px 22px rgba(0,0,0,.22);text-align:left;font-family:"Yu Gothic UI","Meiryo",sans-serif;font-size:13px;color:#111;overflow:hidden;max-width:420px;margin:0 auto}
+.win .tb{background:#fff;padding:6px 10px;font-size:12.5px;border-bottom:1px solid #d5d9e0;display:flex;justify-content:space-between}
+.win .tabs{display:flex;flex-wrap:wrap;gap:2px;padding:8px 8px 0;background:#f0f0f0}
+.win .tabs span{padding:3px 8px;border:1px solid #c3c8d0;border-bottom:none;background:#e6e8ec;border-radius:4px 4px 0 0;font-size:12px}
+.win .tabs span.on{background:#fff;font-weight:700}
+.win .body{background:#fff;margin:0 8px;border:1px solid #c3c8d0;padding:12px;min-height:150px}
+.win .body label{display:block;margin:5px 0}
+.win .btns{padding:10px;text-align:right}
+.win .btns span{display:inline-block;border:1px solid #9aa3b0;background:#e6e8ec;border-radius:3px;padding:2px 14px;margin-left:6px;font-size:12px}
+.win .btns span.pri{border-color:#1e6fdc;background:#dcebff}
+.cb{display:inline-block;width:12px;height:12px;border:1px solid #6b7480;background:#fff;margin-right:6px;vertical-align:-2px;position:relative}
+.cb.on:after{content:"✓";position:absolute;left:1px;top:-4px;color:#1e6fdc;font-size:13px;font-weight:700}
+.menu{display:inline-block;text-align:left;background:#fff;border:1px solid #b9c1cc;box-shadow:0 6px 18px rgba(0,0,0,.25);font-size:12.5px;padding:4px 0;min-width:300px;font-family:"Yu Gothic UI","Meiryo",sans-serif;color:#111}
+.menu div{padding:3px 18px;white-space:nowrap}
+.menu div.hl{background:#cfe3ff}
+.menu hr{border:0;border-top:1px solid #dde1e7;margin:3px 0}
+.menu small{color:#6b7480;margin-left:14px}
+footer{margin-top:50px;background:#0f2a52;color:#cfe0f7;text-align:center;padding:28px 0;font-size:14px}
+details{background:#fff;border-radius:10px;padding:12px 16px;margin:10px 0;box-shadow:0 1px 6px rgba(20,50,100,.07)}
+summary{cursor:pointer;font-weight:700}
+.tray{display:inline-flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center}
+.tray figure{margin:0;text-align:center;font-size:12px;color:#52606f}
+
+
+.gallery{background:#fff;padding:34px 0 26px;border-bottom:1px solid #dde4ee}
+.gallery h2{max-width:980px;margin:0 auto 4px;padding:0 20px 0 34px;border:0;font-size:22px;position:relative}
+.gallery h2:before{content:"";position:absolute;left:20px;top:4px;bottom:4px;width:6px;background:#1e6fdc;border-radius:3px}
+.gallery .sub{max-width:980px;margin:0 auto 14px;padding:0 20px;color:#52606f;font-size:14px}
+.gal-box{position:relative;max-width:1100px;margin:0 auto}
+.gal{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 20px 14px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.slide{flex:0 0 min(86%,760px);margin:0;scroll-snap-align:center;background:#0e1b33;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(20,50,100,.25)}
+.slide svg{display:block;width:100%;height:auto}
+.slide figcaption{background:#fff;padding:12px 16px;border:1px solid #e3e9f1;border-top:0;border-radius:0 0 14px 14px}
+.slide figcaption b{display:block;color:#1e6fdc}
+.slide figcaption span{font-size:14px;color:#52606f}
+.gbtn{position:absolute;top:40%;width:42px;height:42px;border-radius:50%;border:0;background:rgba(15,42,82,.85);color:#fff;font-size:22px;cursor:pointer;z-index:2}
+.gbtn.l{left:6px}.gbtn.r{right:6px}
+.dots{text-align:center;margin-top:2px}
+.dots i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#c5d0df;margin:0 4px;cursor:pointer}
+.dots i.on{background:#1e6fdc}
+
+.dl{background:linear-gradient(135deg,#0f2a52,#1e6fdc);color:#fff;padding:34px 0;text-align:center}
+.dl h2{border:0;padding:0;margin:0 0 6px;font-size:24px;color:#fff}
+.dl p{margin:4px auto;max-width:620px;opacity:.95;font-size:14.5px}
+.dl a.btn{display:inline-block;margin:16px 0 6px;background:#fff;color:#0f2a52;font-weight:700;font-size:19px;text-decoration:none;padding:14px 38px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.dl a.btn.off{opacity:.55;pointer-events:none}
+.dl .meta{font-size:13px;opacity:.9}
+
+.hero h1.logo{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin:0 0 6px;line-height:1}
+.logo-mark{width:clamp(96px,16vw,150px);height:auto;filter:drop-shadow(0 6px 18px rgba(0,20,60,.45))}
+.logo-mark .shine{animation:lshine 3.6s ease-in-out infinite}
+@keyframes lshine{0%{transform:translateX(0)}60%,100%{transform:translateX(240px)}}
+.logo-word{display:inline-flex;align-items:baseline;font-size:clamp(34px,7vw,64px);letter-spacing:.015em;text-shadow:0 4px 22px rgba(0,20,70,.45)}
+.logo-word .l1{font-weight:300;color:#e6f2ff}
+.logo-word .l2{font-weight:900;background:linear-gradient(90deg,#fff 10%,#9ff4ff 60%,#c9b8ff);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.logo-sub{display:flex;align-items:center;justify-content:center;gap:12px;font-size:11.5px;letter-spacing:.32em;color:#cfe6ff;margin:6px 0 14px;flex-wrap:wrap}
+.logo-sub i{display:block;width:clamp(24px,8vw,80px);height:1px;background:linear-gradient(90deg,transparent,#9fd4ff)}
+.logo-sub i:last-child{transform:scaleX(-1)}
+.logo-sub b{font-weight:700;color:#fff;letter-spacing:.24em}
+@media (prefers-reduced-motion:reduce){.logo-mark .shine{animation:none}}
+
+.dl .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.dl a.btn.sub{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.85);box-shadow:none;font-size:16px;padding:12px 26px}
+.dl a.btn.sub.off{display:none}
+.dl .raw{max-width:640px;margin:16px auto 0;text-align:left;font-size:13px}
+.dl .raw label{display:block;margin-bottom:4px;opacity:.95}
+.dl .rawrow{display:flex;gap:8px}
+.dl .rawrow input{flex:1;min-width:0;padding:9px 10px;border:0;border-radius:8px;font-size:12.5px;font-family:Consolas,monospace;color:#0f2a52}
+.dl .rawrow button{border:0;border-radius:8px;background:#0f2a52;color:#fff;padding:0 16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.dl .raw .hint{margin-top:6px;opacity:.85;font-size:12.5px;line-height:1.6}
+
+.upd{list-style:none;margin:0;padding:0}
+.upd li{background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(20,50,100,.07);padding:14px 18px;margin:12px 0;border-left:5px solid #c5d0df}
+.upd li.new{border-left-color:#1e6fdc}
+.upd .vh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.upd .vn{font-size:18px;font-weight:800;color:#0f2a52}
+.upd .vd{font-size:13px;color:#7a8696}
+.upd .tag{font-size:11.5px;font-weight:700;color:#fff;background:#1e6fdc;border-radius:999px;padding:1px 10px}
+.upd ul{margin:4px 0 0;padding-left:1.2em}
+.upd ul li{background:none;box-shadow:none;border:0;border-radius:0;padding:1px 0;margin:0;font-size:15px}
+.upd-more{display:block;margin:14px auto 0;background:#fff;border:1px solid #c5d0df;color:#1e6fdc;font-weight:700;border-radius:999px;padding:8px 26px;cursor:pointer;font-size:14px}
+.dl .hint2{opacity:.92;line-height:1.7}
+.backbar{background:#071a36;text-align:left;padding:8px 0;font-size:13.5px}.backbar a{color:#9fd4ff;text-decoration:none;letter-spacing:.04em}.backbar a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- 画面用の部品(SVG) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mon" viewBox="0 0 60 44"><rect x="1" y="1" width="58" height="34" rx="3" fill="currentColor" stroke="#223" stroke-width="2"/><rect x="24" y="35" width="12" height="5" fill="#223"/><rect x="16" y="40" width="28" height="3" rx="1.5" fill="#223"/></symbol>
+  </defs>
+</svg>
+
+<div class="backbar"><div class="wrap"><a href="https://xx-miyabi-xx.github.io/">← MiYaBi Software トップへ</a></div></div>
+<header class="hero">
+  <div class="wrap">
+    <h1 class="logo" aria-label="MultiFullscreen">
+      <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="mfI" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64c8ff"/><stop offset="1" stop-color="#1e6edc"/></linearGradient></defs><rect x="1" y="3" width="30" height="20" fill="#263246"/><rect x="3.5" y="5.5" width="25" height="15" fill="url(#mfI)"/><g stroke="#ebffff" stroke-opacity=".92" stroke-width="1.6"><path d="M16 5.5V20.5"/><path d="M3.5 13H28.5"/></g><rect x="13.5" y="23" width="5" height="4" fill="#465264"/><rect x="8" y="27" width="16" height="3" fill="#465264"/></svg>
+      <span class="logo-word"><span class="l1">Multi</span><span class="l2">Fullscreen</span></span>
+    </h1>
+    <div class="logo-sub"><i></i>MULTI&#8209;MONITOR FULLSCREEN TOOL<b>BY MiYaBi</b><i></i></div>
+    <p>動画プレイヤーも、ブラウザも、どんなウィンドウも。<br>2画面・3画面・4画面にまたがって「全画面表示」できる Windows 用ソフト</p>
+    <span class="badge">使い方ガイド ／ 製作者：MiYaBi ／ <span id="verBadge">最新版 v1.11.2</span></span>
+  </div>
+</header>
+
+<section class="gallery"><h2>使用イメージ</h2><p class="sub">横にスワイプ（またはボタン）で、4枚のサンプルを見られます。※説明用のイメージ画像です</p>
+<div class="gal-box"><button class="gbtn l" aria-label="前へ" onclick="gal(-1)">‹</button><div class="gal" id="gal"><figure class="slide"><svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="800" height="360" fill="#0e1b33"/><rect x="106.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="81.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="296.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="271.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="486.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="461.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="676.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="651.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><defs><linearGradient id="sk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4fa0"/><stop offset=".6" stop-color="#ff9a5c"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+<linearGradient id="sea1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c5c8f"/><stop offset="1" stop-color="#0b2a4a"/></linearGradient></defs>
+<rect x="30.0" y="125.0" width="740" height="96" fill="url(#sk1)"/>
+<circle cx="488.8" cy="174.92000000000002" r="16.32" fill="#fff3c4"/>
+<polygon points="30.0,192.2 118.8,165.32 215.0,190.28 326.0,158.6 437.00000000000006,192.2 607.2,168.2 770.0,190.28 770.0,196.04 30.0,196.04" fill="#2b3f6b"/>
+<rect x="30.0" y="194.12" width="740" height="26.880000000000003" fill="url(#sea1)"/><path d="M23.0,118.0 h754 v110 h-754 z M30.0,125.0 h170 v96 h-170 z M220.0,125.0 h170 v96 h-170 z M410.0,125.0 h170 v96 h-170 z M600.0,125.0 h170 v96 h-170 z " fill="#0a0f1a" fill-rule="evenodd"/></svg><figcaption><b>4画面を1枚の大画面に</b><span>横一列の4枚のモニターにまたがって、動画やウィンドウを全画面表示します。</span></figcaption></figure><figure class="slide"><svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="800" height="360" fill="#0e1b33"/><rect x="106.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="81.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="296.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="271.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="486.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="461.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="676.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="651.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="410.0" y="125.0" width="170" height="96" fill="#1b2a44"/><rect x="420.0" y="135.0" width="85.0" height="43.2" rx="3" fill="#2f4570"/><rect x="503.5" y="163.4" width="59.49999999999999" height="38.400000000000006" rx="3" fill="#25395f"/><rect x="600.0" y="125.0" width="170" height="96" fill="#1b2a44"/><rect x="610.0" y="135.0" width="85.0" height="43.2" rx="3" fill="#2f4570"/><rect x="693.5" y="163.4" width="59.49999999999999" height="38.400000000000006" rx="3" fill="#25395f"/><defs><linearGradient id="sk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4fa0"/><stop offset=".6" stop-color="#ff9a5c"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+<linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c5c8f"/><stop offset="1" stop-color="#0b2a4a"/></linearGradient></defs>
+<rect x="30.0" y="125.0" width="360" height="96" fill="url(#sk2)"/>
+<circle cx="253.2" cy="174.92000000000002" r="16.32" fill="#fff3c4"/>
+<polygon points="30.0,192.2 73.19999999999999,165.32 120.0,190.28 174.0,158.6 228.00000000000003,192.2 310.8,168.2 390.0,190.28 390.0,196.04 30.0,196.04" fill="#2b3f6b"/>
+<rect x="30.0" y="194.12" width="360" height="26.880000000000003" fill="url(#sea2)"/><path d="M23.0,118.0 h374 v110 h-374 z M30.0,125.0 h170 v96 h-170 z M220.0,125.0 h170 v96 h-170 z " fill="#0a0f1a" fill-rule="evenodd"/></svg><figcaption><b>必要な画面だけ広げる</b><span>2画面だけ全画面にして、残りの画面は別の作業に使えます。</span></figcaption></figure><figure class="slide"><svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="800" height="360" fill="#0e1b33"/><rect x="296.0" y="170.0" width="18" height="6" fill="#3a4a66"/><rect x="486.0" y="170.0" width="18" height="6" fill="#3a4a66"/><rect x="296.0" y="286.0" width="18" height="14" fill="#3a4a66"/><rect x="271.0" y="294.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="486.0" y="286.0" width="18" height="14" fill="#3a4a66"/><rect x="461.0" y="294.0" width="68" height="6" rx="3" fill="#3a4a66"/><defs><linearGradient id="sk3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4fa0"/><stop offset=".6" stop-color="#ff9a5c"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+<linearGradient id="sea3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c5c8f"/><stop offset="1" stop-color="#0b2a4a"/></linearGradient></defs>
+<rect x="220.0" y="67.0" width="360" height="212" fill="url(#sk3)"/>
+<circle cx="443.2" cy="177.24" r="36.04" fill="#fff3c4"/>
+<polygon points="220.0,215.39999999999998 263.2,156.04 310.0,211.16 364.0,141.2 418.0,215.39999999999998 500.8,162.4 580.0,211.16 580.0,223.88 220.0,223.88" fill="#2b3f6b"/>
+<rect x="220.0" y="219.64" width="360" height="59.36000000000001" fill="url(#sea3)"/><path d="M213.0,60.0 h374 v226 h-374 z M220.0,67.0 h170 v96 h-170 z M410.0,67.0 h170 v96 h-170 z M220.0,183.0 h170 v96 h-170 z M410.0,183.0 h170 v96 h-170 z " fill="#0a0f1a" fill-rule="evenodd"/></svg><figcaption><b>田の字の4画面にも対応</b><span>2×2に並べたモニターも、隙間のない長方形なら1つの画面として全画面にできます。</span></figcaption></figure><figure class="slide"><svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" role="img"><rect width="800" height="360" fill="#0e1b33"/><rect x="296.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="271.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><rect x="486.0" y="228.0" width="18" height="14" fill="#3a4a66"/><rect x="461.0" y="236.0" width="68" height="6" rx="3" fill="#3a4a66"/><defs><linearGradient id="sk4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4fa0"/><stop offset=".6" stop-color="#ff9a5c"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+<linearGradient id="sea4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c5c8f"/><stop offset="1" stop-color="#0b2a4a"/></linearGradient></defs>
+<rect x="220.0" y="125.0" width="360" height="96" fill="url(#sk4)"/>
+<circle cx="443.2" cy="174.92000000000002" r="16.32" fill="#fff3c4"/>
+<polygon points="220.0,192.2 263.2,165.32 310.0,190.28 364.0,158.6 418.0,192.2 500.8,168.2 580.0,190.28 580.0,196.04 220.0,196.04" fill="#2b3f6b"/>
+<rect x="220.0" y="194.12" width="360" height="26.880000000000003" fill="url(#sea4)"/><line x1="220.0" y1="221.0" x2="580.0" y2="125.0" stroke="#ff3b3b" stroke-width="5"/><circle cx="400.0" cy="173.0" r="30" fill="none" stroke="#fff" stroke-width="4"/><path d="M213.0,118.0 h374 v110 h-374 z M220.0,125.0 h170 v96 h-170 z M410.0,125.0 h170 v96 h-170 z " fill="#0a0f1a" fill-rule="evenodd"/></svg><figcaption><b>ベゼル補正で映像がつながる</b><span>モニターの枠の幅ぶんを計算して、画面をまたぐ線や景色が自然につながって見えます。</span></figcaption></figure></div><button class="gbtn r" aria-label="次へ" onclick="gal(1)">›</button></div>
+<div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+<script>
+(function(){var g=document.getElementById("gal"),d=document.getElementById("dots").children;
+window.gal=function(n){var s=g.querySelector(".slide");g.scrollBy({left:n*(s.offsetWidth+16),behavior:"smooth"});};
+function up(){var s=g.querySelector(".slide").offsetWidth+16,k=Math.round(g.scrollLeft/s);for(var i=0;i<d.length;i++)d[i].className=i==k?"on":"";}
+g.addEventListener("scroll",up);
+for(var i=0;i<d.length;i++)(function(i){d[i].onclick=function(){var s=g.querySelector(".slide").offsetWidth+16;g.scrollTo({left:i*s,behavior:"smooth"});};})(i);
+})();
+</script></section>
+
+
+<section class="dl" id="download"><div class="wrap">
+<h2>ダウンロード</h2>
+<p>Windows 用インストーラー（無料）。ダウンロードしたファイルを実行すると、インストールが始まります。</p>
+<div class="btns">
+  <a class="btn off" id="dlBtn" href="#" rel="noopener">⬇ ダウンロード（準備中）</a>
+  <a class="btn sub off" id="dlPage" href="#" target="_blank" rel="noopener">GitHubのダウンロードページ</a>
+</div>
+<div class="meta" id="dlMeta"></div>
+<div class="meta" style="margin-top:6px">ダウンロード時に警告が出た場合は、下の「Q&amp;A」の対処方法をご覧ください。</div>
+<script>
+/* ===== ここだけ書き換えてください ===== */
+var SHOW_DOWNLOAD = true;   /* false にすると、この青い帯を隠します */
+var GITHUB_REPO   = "xx-MiYaBi-xx/multifullscreen";   /* "ユーザー名/リポジトリ名" */
+var USE_WIX_CODE  = false;   /* GitHub Pagesでは false のまま(Wix用の設定) */
+var OPEN_AS_WINDOW = false;  /* GitHub Pagesでは false のまま(普通にダウンロードされます) */
+var FILE_NAME     ="MultiFullscreen_Setup.exe";      /* GitHubのリリースに添付するファイル名(バージョン番号なしで固定) */
+var VERSION       = "1.11.2";   /* GitHubに接続できないときだけ表示される予備のバージョン */
+/* ====================================== */
+(function(){
+  if(!SHOW_DOWNLOAD){var dz=document.getElementById("download"); if(dz) dz.style.display="none";}
+  var b=document.getElementById("dlBtn"), pg=document.getElementById("dlPage"), m=document.getElementById("dlMeta");
+  var base="https://github.com/"+GITHUB_REPO+"/releases/latest";
+  function show(ver,date){
+    b.textContent="⬇ MultiFullscreen "+(ver?"v"+ver+" ":"")+"をダウンロード";
+    m.textContent="製作者：MiYaBi"+(ver?" ／ 最新版 v"+ver:"")+(date?" ／ 更新日 "+date:"");
+    var vb=document.getElementById("verBadge"); if(vb&&ver) vb.textContent="最新版 v"+ver;
+  }
+  /* ボタンは常に「最新リリースの固定URL」を指す(新しい版を公開すれば自動で最新になる) */
+  b.href=base+"/download/"+FILE_NAME; b.className="btn";
+  b.addEventListener("click",function(e){
+    if(!USE_WIX_CODE && OPEN_AS_WINDOW){
+      /* 「新しいウィンドウ」(小さな別ウィンドウ)で開く。ブロックされたら通常の新しいタブで開く */
+      var w=null;
+      try{ w=window.open(b.href,"mfdl","popup=yes,width=900,height=640,left=80,top=60,noopener"); }catch(err){}
+      if(w){ e.preventDefault(); }
+    }
+    if(USE_WIX_CODE){
+      /* Wixのページ側のコードに、ダウンロード先を渡す(ページ側でダウンロードを開始する) */
+      e.preventDefault();
+      try{ window.parent.postMessage({mfDownload:b.href},"*"); }catch(err){}
+    }
+    var h=document.getElementById("dlHint"); if(h){ h.style.fontWeight="700"; h.style.opacity="1"; }
+  });
+  pg.href=base; pg.className="btn sub";
+  show(VERSION,"");
+  /* バージョンと更新日は、GitHubの最新リリースから自動で取得 */
+  fetch("https://api.github.com/repos/"+GITHUB_REPO+"/releases/latest").then(function(r){return r.json();}).then(function(j){
+    if(j&&j.tag_name) show((j.tag_name||"").replace(/^\D+/,""),(j.published_at||"").slice(0,10));
+  }).catch(function(){});
+})();
+</script>
+</div></section>
+
+<nav class="toc"><div class="wrap">
+  <a href="#install">① インストール</a><a href="#basic">② 基本の使い方</a><a href="#keys">③ ショートカット</a><a href="#auto">④ 自動全画面</a><a href="#gather">⑤ ウィンドウ集約</a><a href="#bezel">⑥ ベゼル補正</a><a href="#other">⑦ 電源・カーソル</a><a href="#remove">⑧ 更新・削除</a><a href="#updates">アップデート</a><a href="#faq">Q&amp;A</a>
+</div></nav>
+
+<div class="wrap">
+
+<section>
+  <h2>できること</h2>
+  <p class="lead">普通の全画面表示は「1画面だけ」。このソフトは、複数のモニターをひとつの大きな画面として使えます。</p>
+  <div class="grid">
+    <div class="feat"><b>1〜4画面で全画面</b>ボタン操作かショートカットで、好きな枚数のモニターに広げます。</div>
+    <div class="feat"><b>どのソフトでもOK</b>動画プレイヤー、ブラウザ、ゲーム、資料など、普通のウィンドウなら対象です。</div>
+    <div class="feat"><b>自動で全画面</b>指定したソフトを起動した瞬間に、自動で複数画面へ広げます。</div>
+    <div class="feat"><b>ベゼル補正</b>モニターの枠で映像が途切れて見えないよう、枠の幅を補正します。</div>
+    <div class="feat"><b>ウィンドウ集約</b>バラバラの画面に散らばったウィンドウを、メインモニターへ一括移動します。</div>
+    <div class="feat"><b>スリープ防止・カーソル非表示</b>映像を見ている間の邪魔を減らす設定もあります。</div>
+  </div>
+</section>
+
+<section id="install">
+  <h2><span class="no">①</span>インストール</h2>
+  <p class="lead">インストーラー（MultiFullscreen_Setup_v○○.exe）を実行するだけです。</p>
+  <div class="card row">
+    <div class="txt">
+      <ol class="steps">
+        <li><b>インストーラーをダブルクリック</b><br>管理者の許可を求められたら「はい」を選びます。</li>
+        <li><b>インストール先を確認</b><br>通常は Windows 標準の「Program Files」に入ります。別の場所を選んだ場合は、その中に自動で「MultiFullscreen」フォルダが作られます。</li>
+        <li><b>オプションを選ぶ</b><br>デスクトップのショートカット、Windows起動時の自動起動、インストール後の起動を選べます。</li>
+        <li><b>「インストール」を押す</b><br>終わるとタスクトレイ（画面右下）にアイコンが現れます。</li>
+      </ol>
+    </div>
+    <div class="fig">
+      <div class="win">
+        <div class="tb"><span>MultiFullscreen セットアップ</span><span>✕</span></div>
+        <div class="body" style="margin:10px;min-height:0">
+          <b>MultiFullscreen をインストールします</b>
+          <div style="border:1px solid #c3c8d0;border-radius:4px;padding:8px;margin:8px 0;font-size:12px">インストール先<br><span style="color:#1e6fdc">C:\Program Files\MultiFullscreen</span><br>[ 参照... ]</div>
+          <label><span class="cb on"></span>デスクトップにショートカットを作る</label>
+          <label><span class="cb"></span>Windows 起動時に自動で起動する</label>
+          <label><span class="cb on"></span>インストール後に起動する</label>
+        </div>
+        <div class="btns"><span class="pri">インストール</span><span>キャンセル</span></div>
+      </div>
+      <div class="cap">※ 画面は説明用のイメージです</div>
+    </div>
+  </div>
+  <div class="note">「Windows によってPCが保護されました」と出た場合は「詳細情報」→「実行」を選んでください。</div>
+</section>
+
+<section id="basic">
+  <h2><span class="no">②</span>基本の使い方</h2>
+  <p class="lead">使い方は2通り。「トレイのメニューから」または「ショートカットキー」です。</p>
+
+  <div class="card row">
+    <div class="txt">
+      <h3 style="margin-top:0">方法A：タスクトレイのメニューから</h3>
+      <ol class="steps">
+        <li>全画面にしたいウィンドウ（動画プレイヤーなど）を、いちど<b>クリックして手前にします</b>。</li>
+        <li>画面右下のタスクトレイにある<b>モニター型のアイコン</b>を右クリックします。</li>
+        <li>「<b>2画面で全画面表示</b>」「<b>4画面で全画面表示</b>」など、広げたい枚数を選びます。</li>
+        <li>戻したいときは「<b>元に戻す</b>」を選びます。</li>
+      </ol>
+    </div>
+    <div class="fig">
+      <div class="menu">
+        <div>1画面で全画面表示<small>Ctrl+Alt+1</small></div>
+        <div class="hl">2画面で全画面表示<small>Ctrl+Alt+2</small></div>
+        <div>3画面で全画面表示<small>Ctrl+Alt+3</small></div>
+        <div>4画面で全画面表示<small>Ctrl+Alt+4</small></div>
+        <div>元に戻す<small>Ctrl+Alt+0</small></div>
+        <hr>
+        <div>全ウィンドウをメインモニターに集める<small>Ctrl+Alt+G</small></div>
+        <div>集める前の位置に戻す<small>Ctrl+Alt+Shift+G</small></div>
+        <hr>
+        <div>ベゼル補正を使う</div>
+        <div>アプリ起動時の自動全画面を使う</div>
+        <div>設定...</div>
+        <div>終了</div>
+      </div>
+      <div class="cap">トレイアイコンの右クリックメニュー（イメージ）</div>
+    </div>
+  </div>
+
+  <h3>どう広がるの？</h3>
+  <p>モニターが4枚ある環境で、ウィンドウを広げた例です（青い部分が映像の表示範囲）。</p>
+  <div class="card">
+    <div class="tray" style="gap:30px">
+      <figure>
+        <svg width="260" height="64" viewBox="0 0 260 64"><g><use href="#mon" x="2" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="68" y="6" width="60" height="44" style="color:#dfe5ee"/><use href="#mon" x="134" y="6" width="60" height="44" style="color:#dfe5ee"/><use href="#mon" x="200" y="6" width="60" height="44" style="color:#dfe5ee"/></g></svg><br>1画面
+      </figure>
+      <figure>
+        <svg width="260" height="64" viewBox="0 0 260 64"><g><use href="#mon" x="2" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="68" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="134" y="6" width="60" height="44" style="color:#dfe5ee"/><use href="#mon" x="200" y="6" width="60" height="44" style="color:#dfe5ee"/></g></svg><br>2画面
+      </figure>
+      <figure>
+        <svg width="260" height="64" viewBox="0 0 260 64"><g><use href="#mon" x="2" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="68" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="134" y="6" width="60" height="44" style="color:#2a8bf2"/><use href="#mon" x="200" y="6" width="60" height="44" style="color:#2a8bf2"/></g></svg><br>4画面（横一列の場合）
+      </figure>
+    </div>
+    <div class="tip">モニターが「田の字」に並んでいても、隙間なく長方形になる組み合わせだけが対象です。同じショートカットをもう一度押すと、<b>別の組み合わせ</b>に切り替わります。</div>
+  </div>
+
+  <h3>トレイアイコンの色で状態がわかる</h3>
+  <div class="card">
+    <p style="margin-top:0">アイコンはモニターの形で、全画面にしている画面数によって色が変わります。</p>
+    <div class="tray">
+      <figure><svg width="54" height="40" viewBox="0 0 60 44"><use href="#mon" style="color:#2a8bf2"/></svg><br>通常</figure>
+      <figure><svg width="54" height="40" viewBox="0 0 60 44"><use href="#mon" style="color:#2fb85a"/></svg><br>1画面</figure>
+      <figure><svg width="54" height="40" viewBox="0 0 60 44"><use href="#mon" style="color:#f0961a"/></svg><br>2画面</figure>
+      <figure><svg width="54" height="40" viewBox="0 0 60 44"><use href="#mon" style="color:#9b3fd8"/></svg><br>3画面</figure>
+      <figure><svg width="54" height="40" viewBox="0 0 60 44"><use href="#mon" style="color:#d92b35"/></svg><br>4画面</figure>
+    </div>
+    <div class="cap">※ 実際のアイコンとは細部が異なる場合があります。</div>
+  </div>
+</section>
+
+<section id="keys">
+  <h2><span class="no">③</span>ショートカットキー</h2>
+  <p class="lead">どのソフトを使っていても、キーひとつで操作できます。初期設定は次のとおりです。</p>
+  <div class="card row">
+    <div class="txt">
+      <table>
+        <tr><th>操作</th><th>キー</th></tr>
+        <tr><td>1〜9画面で全画面表示</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>1</kbd>〜<kbd>9</kbd></td></tr>
+        <tr><td>元に戻す</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>0</kbd></td></tr>
+        <tr><td>全ウィンドウを集める</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd></td></tr>
+        <tr><td>集める前に戻す</td><td><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td></tr>
+      </table>
+    </div>
+    <div class="fig">
+      <div class="win">
+        <div class="tb"><span>設定 － MultiFullscreen</span><span>✕</span></div>
+        <div class="tabs"><span>一般</span><span class="on">ショートカット</span><span>ウィンドウ集約</span><span>除外アプリ</span></div>
+        <div class="body">
+          <label>2画面で全画面表示　<span style="border:1px solid #6b7480;padding:1px 10px">Ctrl + Alt + 2</span></label>
+          <label>3画面で全画面表示　<span style="border:1px solid #6b7480;padding:1px 10px">Ctrl + Alt + 3</span></label>
+          <label>4画面で全画面表示　<span style="border:1px solid #1e6fdc;padding:1px 10px;background:#eaf3ff">キーを押してください…</span></label>
+        </div>
+        <div class="btns"><span class="pri">OK</span><span>キャンセル</span><span>適用</span></div>
+      </div>
+      <div class="cap">設定 →「ショートカット」タブ（イメージ）</div>
+    </div>
+  </div>
+  <div class="tip"><b>キーを変えたいとき：</b>設定画面の「ショートカット」タブで、変えたい項目の枠をクリックし、使いたいキーを押すだけです。他のソフトとキーが重なる場合に便利です。</div>
+</section>
+
+<section id="auto">
+  <h2><span class="no">④</span>起動したら自動で全画面にする</h2>
+  <p class="lead">よく使う動画プレイヤーなどを登録しておくと、起動した瞬間に自動で複数画面に広げます。</p>
+  <div class="card row">
+    <div class="txt">
+      <ol class="steps">
+        <li>トレイアイコンを右クリック →「<b>設定...</b>」を開きます。</li>
+        <li>「<b>一般</b>」タブの自動全画面のルール欄で、<b>ソフト（実行ファイル名）</b>を追加します。</li>
+        <li>そのソフトを何画面で広げるかを選びます。</li>
+        <li>「<b>適用</b>」を押すと有効になります。</li>
+      </ol>
+      <p>メニューの「アプリ起動時の自動全画面を使う」で、全体のオン／オフも切り替えられます。</p>
+    </div>
+    <div class="fig">
+      <div class="win">
+        <div class="tb"><span>設定 － MultiFullscreen</span><span>✕</span></div>
+        <div class="tabs"><span class="on">一般</span><span>ショートカット</span><span>ウィンドウ集約</span></div>
+        <div class="body">
+          <label><span class="cb on"></span>Windows 起動時に自動で起動する</label>
+          <label><span class="cb on"></span>アプリ起動時に自動で全画面にする</label>
+          <label><span class="cb on"></span>プレイヤーに新しい動画を入れたとき、再度全画面にする</label>
+          <div style="border:1px solid #c3c8d0;margin-top:6px;font-size:12px">
+            <div style="background:#eef3fa;padding:3px 8px">アプリ　　　　　　　　画面数</div>
+            <div style="padding:3px 8px">vlc.exe　　　　　　　　　4画面</div>
+            <div style="padding:3px 8px">mpc-hc64.exe　　　　　　2画面</div>
+          </div>
+        </div>
+        <div class="btns"><span class="pri">OK</span><span>キャンセル</span><span>適用</span></div>
+      </div>
+      <div class="cap">設定 →「一般」タブ（イメージ）</div>
+    </div>
+  </div>
+  <div class="tip"><b>再度全画面にする機能：</b>プレイヤーを元のサイズに戻したあと、別の動画をドラッグ＆ドロップで入れ替えたとき、自動でもう一度全画面に広げ直します。</div>
+</section>
+
+<section id="gather">
+  <h2><span class="no">⑤</span>バラバラのウィンドウをメインモニターに集める</h2>
+  <p class="lead">モニターを外したり、画面がごちゃごちゃになったときの整理に便利です。</p>
+  <div class="card row">
+    <div class="txt">
+      <ol class="steps">
+        <li>設定の「<b>ウィンドウ集約</b>」タブで、<b>メインモニター</b>を選びます。</li>
+        <li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> を押すと、すべてのウィンドウがメインモニターへ移動します。</li>
+        <li>元に戻したいときは <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> です。</li>
+      </ol>
+      <p><b>集めたくないソフト</b>は「除外アプリ」タブで登録できます。<br>また、モニターを接続・取り外ししたときに<b>自動で集める</b>設定もあります。</p>
+    </div>
+    <div class="fig">
+      <svg width="340" height="120" viewBox="0 0 340 120">
+        <g><use href="#mon" x="0" y="10" width="76" height="56" style="color:#dfe5ee"/><use href="#mon" x="86" y="10" width="76" height="56" style="color:#2a8bf2"/><use href="#mon" x="172" y="10" width="76" height="56" style="color:#dfe5ee"/><use href="#mon" x="258" y="10" width="76" height="56" style="color:#dfe5ee"/></g>
+        <text x="124" y="84" text-anchor="middle" font-size="12" fill="#1e6fdc">メインモニター</text>
+        <path d="M38 40 H80 M212 40 H168 M296 40 H214" stroke="#e9622a" stroke-width="2.4" fill="none" marker-end="url(#ar)"/>
+        <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#e9622a"/></marker></defs>
+      </svg>
+      <div class="cap">他のモニターのウィンドウが、メインモニターへ集まります</div>
+    </div>
+  </div>
+</section>
+
+<section id="bezel">
+  <h2><span class="no">⑥</span>ベゼル補正（モニターの枠を考慮して表示）</h2>
+  <p class="lead">モニターの枠（ベゼル）の部分にも映像が「あるもの」として扱い、画面をまたぐ映像のズレを自然に見せる機能です。</p>
+  <div class="card row">
+    <div class="txt">
+      <ol class="steps">
+        <li>設定の「<b>ベゼル補正</b>」タブを開きます。</li>
+        <li><b>調整方法</b>を選びます：<br>・設定用の<b>線</b>の画像を表示して合わせる<br>・自分で用意した<b>画像</b>で合わせる<br>・今使っている<b>ウィンドウ（プレイヤー）</b>で合わせる</li>
+        <li>画面上の線や映像を見ながら、枠の幅（横・縦）を調整します。</li>
+        <li>「<b>全画面を解除したあと、補正も解除する</b>」かどうかも選べます。</li>
+      </ol>
+    </div>
+    <div class="fig">
+      <svg width="340" height="150" viewBox="0 0 340 150">
+        <rect x="6" y="10" width="150" height="100" fill="#cfe6ff" stroke="#223" stroke-width="5"/>
+        <rect x="184" y="10" width="150" height="100" fill="#cfe6ff" stroke="#223" stroke-width="5"/>
+        <path d="M6 70 H156 M184 70 H334" stroke="#e03a3a" stroke-width="2.5"/>
+        <path d="M156 70 H184" stroke="#e03a3a" stroke-width="2.5" stroke-dasharray="4 4"/>
+        <text x="170" y="132" text-anchor="middle" font-size="12" fill="#52606f">枠（ベゼル）の分だけ線がつながるように調整</text>
+      </svg>
+      <div class="cap">調整用の線がまっすぐつながれば完了です</div>
+    </div>
+  </div>
+  <div class="note"><b>ご注意：</b>ベゼル補正を使っている間は、画面の見え方の都合上、マウスで直接プレイヤーを操作できません（キーボード操作は可能です）。操作したいときは補正をオフにしてください。ソフトによってはウィンドウが大きすぎると受け付けない場合があります。</div>
+</section>
+
+<section id="other">
+  <h2><span class="no">⑦</span>スリープ防止・カーソル非表示</h2>
+  <div class="grid" style="margin-top:12px">
+    <div class="feat"><b>電源（スリープ防止）</b>設定の「電源」タブで、全画面中にPCやモニターが勝手にスリープしないようにできます。</div>
+    <div class="feat"><b>カーソル非表示</b>全画面中に、マウスカーソルを自動で隠します。「指定したソフトだけ」「動画プレイヤーだけ」「すべてのウィンドウ」から選べ、何秒動かさなければ隠すかも設定できます。</div>
+    <div class="feat"><b>マウスで動かすと元に戻す</b>設定の「一般」タブで有効にすると、複数画面で全画面にしているプレイヤーをマウスで動かしたとき、自動で元のサイズに戻ります。</div>
+    <div class="feat"><b>設定画面を開いたまま作業</b>設定画面は開いたままでも他の作業ができます。「適用」を押した時点で反映されます。</div>
+  </div>
+  <div class="card" style="margin-top:18px;text-align:center">
+    <div class="win" style="max-width:440px">
+      <div class="tb"><span>設定 － MultiFullscreen</span><span>✕</span></div>
+      <div class="tabs"><span>ベゼル補正</span><span>電源</span><span class="on">カーソル</span><span>バージョン</span></div>
+      <div class="body">
+        <label><span class="cb on"></span>全画面中にマウスカーソルを隠す</label>
+        <label>対象：　◉ 指定したソフト　○ 動画プレイヤー　○ すべてのウィンドウ</label>
+        <label>動かさなくなってから　<span style="border:1px solid #6b7480;padding:0 10px">3</span> 秒後に隠す</label>
+      </div>
+      <div class="btns"><span class="pri">OK</span><span>キャンセル</span><span>適用</span></div>
+    </div>
+    <div class="cap">設定 →「カーソル」タブ（イメージ）</div>
+  </div>
+</section>
+
+<section id="remove">
+  <h2><span class="no">⑧</span>アップデートと削除</h2>
+  <div class="card">
+    <h3 style="margin-top:0">アップデート</h3>
+    <p>新しいバージョンのインストーラーをそのまま実行してください。<b>設定は別のファイルに保存されているため、上書きインストールしてもそのまま引き継がれます。</b>更新内容は、設定の「<b>バージョン</b>」タブでバージョンごとに確認できます。</p>
+    <h3>アンインストール（削除）</h3>
+    <ol class="steps">
+      <li>Windows の「<b>設定</b>」→「<b>アプリ</b>」→「<b>インストールされているアプリ</b>」を開きます。</li>
+      <li>一覧から「<b>MultiFullscreen</b>」を選び、「<b>アンインストール</b>」を押します。</li>
+      <li>設定ファイルも消すかどうかを選べます。</li>
+    </ol>
+  </div>
+</section>
+
+<section id="updates">
+  <h2>アップデート情報</h2>
+  <p class="lead">新しい機能や修正の履歴です（新しいものが上）。ダウンロードボタンは、いつも最新版につながります。</p>
+  <ul class="upd" id="updList"></ul>
+  <button type="button" class="upd-more" id="updMore" style="display:none">これより前の履歴を見る</button>
+  <script>
+  /* ===== アップデート情報：新しい版を出したら、いちばん上に1つ足してください ===== */
+  var UPDATES = [
+    { v:"1.11.0", d:"2026-10-17", items:["設定に「システム」タブを追加（OS・CPU・GPU・システムメモリー・GPUメモリーの情報を表示）","CPUとGPUの使用率と温度を表示（CPU温度はお使いのPCによっては表示できません。GPUの温度はNVIDIAのみ対応）","GPUが複数ある場合は、すべてのGPUを表示","NVIDIA製GPUの場合は、RTX Video Super Resolution が動作しているかを推定して表示"] },
+    { v:"1.10.0", d:"2026-10-17", items:["複数画面で全画面表示しているプレイヤーを、マウスで動かすと元のサイズに戻る設定を追加（設定の「一般」タブ）"] },
+    { v:"1.9.1",  d:"2026-10-16", items:["インストーラーの説明文がボタンに重なって表示される問題を修正"] },
+    { v:"1.9.0",  d:"2026-10-16", items:["設定画面を開いたままでも、他のウィンドウを操作できるようにしました","設定画面に「適用」ボタンを追加（画面を閉じずに設定を反映できます）","「設定画面を常に手前に表示する」の切り替えを追加"] },
+    { v:"1.8.1",  d:"2026-10-16", items:["インストーラーのキャンセルボタンが動かない問題を修正","インストール先を標準のプログラムフォルダー（Program Files）に変更","任意のフォルダーを選んだ場合は、その中に「MultiFullscreen」フォルダーを自動で作成","旧バージョンがインストールされていれば、新しい場所へ自動で置き換え"] },
+    { v:"1.8.0",  d:"2026-10-15", items:["全画面表示中にマウスカーソルを自動で隠す機能を追加（「カーソル」タブ）","隠す対象を選べます（指定したソフトだけ／動画プレイヤーだけ／すべてのウィンドウ）","マウスを動かさずに何秒たつと隠すかを設定できます"] },
+    { v:"1.7.0",  d:"2026-10-15", items:["ベゼル補正を追加（調整用の線・画像・開いているウィンドウを表示して、モニターの隙間を合わせられます）","全画面を解除したあと、ベゼル補正をオフに戻すかどうかを選べるようにしました","スリープ・画面オフの防止設定を追加（常に／全画面表示中だけ）","更新履歴を、設定の「バージョン」タブで確認できるようにしました","全画面表示中は、トレイアイコンの色が画面数に応じて変わります"] },
+    { v:"1.6.0",  d:"2026-10-15", items:["インストーラーを追加（Windowsの「アプリ」一覧からアンインストールできます）","設定はインストール先とは別の場所に保存し、更新しても引き継がれます"] },
+    { v:"1.5.0",  d:"2026-10-15", items:["バージョン情報タブを追加","exeファイル名にバージョンを付けるようにしました","二重起動しようとしたときにメッセージを表示"] },
+    { v:"1.4.0",  d:"2026-10-15", items:["元に戻した後、別の動画を開いたら再度自動で全画面にする設定を追加"] },
+    { v:"1.3.0",  d:"2026-10-15", items:["ウィンドウ集約の除外アプリを指定できるようにしました","モニターの接続・切断時の自動集約を追加"] },
+    { v:"1.2.0",  d:"2026-10-15", items:["ショートカットキーを自由に変更できるようにしました","全ウィンドウをメインモニターに集める機能を追加（元に戻す付き）"] },
+    { v:"1.1.0",  d:"2026-10-15", items:["設定メニューを追加（Windows起動時の自動起動、アプリごとの自動全画面ルール）","トレイアイコンをモニター型に変更"] },
+    { v:"1.0.0",  d:"2026-10-14", items:["初版公開：好きなウィンドウを1〜4画面にまたがって全画面表示"] }
+  ];
+  /* ======================================================================== */
+  (function(){
+    var SHOW=4, list=document.getElementById("updList"), more=document.getElementById("updMore");
+    function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+    var html="";
+    for(var i=0;i<UPDATES.length;i++){
+      var u=UPDATES[i], li='<li class="'+(i===0?'new':'')+'"'+(i>=SHOW?' data-old="1" style="display:none"':'')+'><div class="vh"><span class="vn">v'+esc(u.v)+'</span>'+(i===0?'<span class="tag">最新版</span>':'')+'<span class="vd">'+esc(u.d)+'</span></div><ul>';
+      for(var j=0;j<u.items.length;j++) li+='<li>'+esc(u.items[j])+'</li>';
+      html+=li+'</ul></li>';
+    }
+    list.innerHTML=html;
+    if(UPDATES.length>SHOW){
+      more.style.display="block";
+      more.onclick=function(){
+        var olds=list.querySelectorAll("li[data-old]");
+        for(var k=0;k<olds.length;k++) olds[k].style.display="block";
+        more.style.display="none";
+      };
+    }
+  })();
+  </script>
+</section>
+
+<section id="faq">
+  <h2>Q&amp;A</h2>
+  <details><summary>Q. ダウンロード時に「安全にダウンロードできません」「一般的にダウンロードされていません」と出ます</summary>
+<p>個人が作ったソフトには、Microsoft の「実績が少ないファイル」の警告が出ることがあります。ウイルスが見つかったという意味ではありません。次の手順で保存できます。</p>
+<ol><li>Edge の画面右上に出るダウンロードの表示で、ファイル名の右の「…」をクリックします。</li>
+<li>「保持する」を選びます（さらに確認が出たら「詳細表示」→「とにかく保持する」を選びます）。</li>
+<li>保存したファイルをダブルクリックし、「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を選びます。</li></ol></details>
+<details><summary>Q. ダウンロードボタンを押すと、新しいタブが白い画面（無題）のままになります</summary>
+<p>お使いのブラウザやセキュリティの設定で、ページ内のボタンからのダウンロードがブロックされているためです。次のどちらかでダウンロードしてください。</p>
+<ul><li>ボタンの下の「GitHubのダウンロードページ」を開き、「Assets」の <b>MultiFullscreen_Setup.exe</b> をクリックします。</li>
+<li>空白のタブを閉じ、もう一度ボタンを押します。</li></ul></details>
+<details><summary>Q. 全画面にならない（または大きさがおかしい）ソフトがあります</summary><p>ソフト側がウィンドウの大きさ変更を受け付けない場合があります。一度「元に戻す」を実行してから、もう一度お試しください。</p></details>
+  <details><summary>Q. ショートカットが反応しません</summary><p>他のソフトと同じキーを使っている可能性があります。設定の「ショートカット」タブで別のキーに変更してください。</p></details>
+  <details><summary>Q. 画面数の組み合わせが思った形になりません</summary><p>隙間なく長方形になる組み合わせだけが対象です。同じショートカットをもう一度押すと、別の組み合わせに切り替わります。</p></details>
+  <details><summary>Q. カーソルが消えないソフトがあります</summary><p>ソフト独自のカーソルを使っている場合、隠せないことがあります。その場合は対象を「すべてのウィンドウ」にしてお試しください。</p></details>
+  <details><summary>Q. 終了するには？</summary><p>トレイアイコンを右クリックして「終了」を選びます。</p></details>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">MultiFullscreen ／ 製作者：MiYaBi<br>© MiYaBi All rights reserved.</div>
+</footer>
+
+</body>
+</html>
