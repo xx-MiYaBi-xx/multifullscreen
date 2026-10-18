@@ -225,7 +225,8 @@ var VERSION       = "1.11.2";   /* GitHubに接続できないときだけ表示
   show(VERSION,"");
   /* バージョンと更新日は、GitHubの最新リリースから自動で取得 */
   fetch("https://api.github.com/repos/"+GITHUB_REPO+"/releases/latest").then(function(r){return r.json();}).then(function(j){
-    if(j&&j.tag_name) show((j.tag_name||"").replace(/^\D+/,""),(j.published_at||"").slice(0,10));
+    if(j&&j.tag_name) var m=/(\d+(?:\.\d+)+)/.exec([j.tag_name,j.name].concat((j.assets||[]).map(function(x){return x.name;})).join(" "));
+    show(m?m[1]:VERSION,(j.published_at||"").slice(0,10));
   }).catch(function(){});
 })();
 </script>
